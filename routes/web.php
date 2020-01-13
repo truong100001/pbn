@@ -15,3 +15,9 @@ Route::get('/','HomeController@index');
 
 Route::get('/add-domain','HomeController@addDomain');
 Route::post('/add-domain','HomeController@postAddDomain');
+
+Route::post('/add-keyword','HomeController@addkeyWord');
+
+Route::get('/check-domain','HomeController@check_domain');
+
+Route::get('/test','HomeController@check_keyword');

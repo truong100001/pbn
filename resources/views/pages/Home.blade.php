@@ -5,3 +5,7 @@
     @include('components.home.content')
     @include('components.footer')
 @endsection
+
+@section('script')
+
+@endsection

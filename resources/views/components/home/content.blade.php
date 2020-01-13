@@ -1,3 +1,25 @@
+
+@if(session('message'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            text:"Thêm thành công",
+            showConfirmButton: true,
+            timer:3000
+        });
+    </script>
+@endif
+
+@if(session('message2'))
+    <script>
+        Swal.fire({
+            icon: 'success',
+            text:"Quét hoàn thành",
+            showConfirmButton: true,
+            timer:3000
+        });
+    </script>
+@endif
 <!-- Breadcomb area Start-->
 <div class="row" style="margin-top: 50px;">
     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
@@ -23,9 +45,11 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6 col-sm-6 col-xs-3">
                                                 <div class="breadcomb-report">
-                                                    <button data-toggle="tooltip" data-placement="left" title="Quét" class="btn">
-                                                        <i class="notika-icon notika-refresh"></i>
-                                                    </button>
+                                                    <a href="{{asset('/check-domain')}}">
+                                                        <button data-toggle="tooltip" data-placement="left" title="Quét" class="btn">
+                                                            <i class="notika-icon notika-refresh"></i>
+                                                        </button>
+                                                    </a>
                                                     <a href="{{asset('/add-domain')}}">
                                                         <button data-toggle="tooltip" data-placement="top" title="Thêm mới" class="btn"><i class="fas fa-plus"></i></button>
                                                     </a>
@@ -73,7 +97,15 @@
                                                 @foreach($domains as $i => $domain)
                                                 <tr>
                                                     <td>{{$i+1}}</td>
-                                                    <td>{{$domain->domain}}</td>
+                                                    <td>
+
+                                                        @if($domain->status_domain ==1)
+                                                            <span class="text-success"> {{$domain->domain}}<i class="fas fa-check-circle"></i></span>
+                                                        @else
+                                                            <span class="text-danger"> {{$domain->domain}}<i class="fas fa-times-circle"></i></span>
+
+                                                        @endif
+                                                    </td>
                                                     <td>{{$domain->rd}}</td>
                                                     <td>
                                                         @if($domain->whois == 1)
@@ -144,7 +176,7 @@
                 </div>
                 <div id="menu14" class="tab-pane animated zoomInRight">
                     <div class="breadcomb-area" style="margin-top: 30px;">
-                        <div class="container">
+                        <div class="container1 listKeyWord">
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="breadcomb-list">
@@ -170,7 +202,48 @@
                                                                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                                                                 </div>
                                                                 <div class="modal-body">
-                                                                    
+                                                                    <div class="form-example-wrap">
+                                                                        <div class="cmp-tb-hd">
+                                                                            <h2>Thêm mới</h2>
+                                                                        </div>
+                                                                        <form action="{{asset('/add-keyword')}}" method="post">
+                                                                            {{csrf_field()}}
+                                                                            <div class="row">
+                                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                                                                    <div class="form-group ic-cmp-int">
+                                                                                        <div class="form-ic-cmp">
+                                                                                            <i class="far fa-address-card"></i>
+                                                                                        </div>
+                                                                                        <div class="chosen-select-act fm-cmp-mg">
+                                                                                            <select name="id_domain" class="chosen" data-placeholder="Choose a Country...">
+                                                                                                @foreach($domains as $domain)
+                                                                                                    <option value="{{$domain->id}}">{{$domain->domain}}</option>
+                                                                                                @endforeach
+                                                                                            </select>
+                                                                                        </div>
+
+                                                                                    </div>
+                                                                                </div>
+
+                                                                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12" style="margin-top: 20px;">
+                                                                                    <div class="form-group ic-cmp-int">
+                                                                                        <div class="form-ic-cmp">
+                                                                                            <i class="notika-icon notika-edit"></i>
+                                                                                        </div>
+                                                                                        <div class="nk-int-st">
+                                                                                            <input name="keyword" type="text" class="form-control" placeholder="Nhập từ khóa">
+                                                                                            @if($errors->has('keyword'))
+                                                                                                <div class="text-danger text-small">{{ $errors->first('keyword') }}</div>
+                                                                                            @endif
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                            <div class="form-example-int mg-t-15">
+                                                                                <button class="btn btn-success notika-btn-success">Thêm</button>
+                                                                            </div>
+                                                                        </form>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -189,7 +262,7 @@
                     <!-- Breadcomb area End-->
                     <!-- Data Table area Start-->
                     <div class="data-table-area">
-                        <div class="container">
+                        <div class="container1 " >
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
                                     <div class="data-table-list">
@@ -201,22 +274,25 @@
                                                     <th>Domain</th>
                                                     <th>Key word</th>
                                                     <th>Thứ hạng</th>
+                                                    <th>Ngày quét gần nhất</th>
                                                     <th></th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
+                                                    @foreach($keywords as $i => $keyword)
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td>123</td>
-                                                        <td>123</td>
+                                                        <td>{{$i+1}}</td>
+                                                        <td>{{$keyword->domain}}</td>
+                                                        <td>{{$keyword->key_word}}</td>
+                                                        <td>{{$keyword->rank}}</td>
+                                                        <td>{{$keyword->updated_at}}</td>
                                                         <td>
-                                                           123
-                                                        </td>
-                                                        <td>
+                                                            <button class="btn btn-default btn-icon-notika waves-effect"><i class="notika-icon notika-menu"></i>Xem lịch sử</button>
                                                             <button class="btn btn-small btn-default btn-icon-notika waves-effect"><i class="notika-icon notika-edit"></i> Sửa</button>
                                                             <button class="btn  btn-small btn-default btn-icon-notika waves-effect"><i class="notika-icon notika-close"></i> Xóa</button>
                                                         </td>
                                                     </tr>
+                                                    @endforeach
 
                                                 </tbody>
                                             </table>

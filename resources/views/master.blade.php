@@ -27,7 +27,7 @@
     <!-- bootstrap select CSS -->
     <link rel="stylesheet" href="asset/css/bootstrap-select/bootstrap-select.css">
 
-
+    <link rel="stylesheet" href="asset/css/chosen/chosen.css">
     <!-- datapicker CSS
     ============================================ -->
     <link rel="stylesheet" href="asset/css/datapicker/datepicker3.css">
